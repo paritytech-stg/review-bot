@@ -58,7 +58,7 @@ const actionId = `${context.serverUrl}/${repo.owner}/${repo.repo}/actions/runs/$
 
 const pr = context.payload.pull_request as PullRequest;
 
-const api = new PullRequestApi(getOctokit(inputs.repoToken), pr, generateCoreLogger(), actionId);
+const api = new PullRequestApi(getOctokit(inputs.repoToken), pr, generateCoreLogger());
 
 const logger = generateCoreLogger();
 
