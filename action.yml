@@ -18,6 +18,9 @@ inputs:
     description: 'Location of the configuration file'
     required: false
     default: '.github/review-bot.yml'
+  request-reviewers:
+    description: If the system should automatically request the required reviewers.
+    required: false
 outputs:
   repo:
     description: 'The name of the repo in owner/repo pattern'

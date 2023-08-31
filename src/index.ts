@@ -1,4 +1,4 @@
-import { debug, getInput, info, setFailed, setOutput } from "@actions/core";
+import { debug, getBooleanInput, getInput, info, setFailed, setOutput } from "@actions/core";
 import { context, getOctokit } from "@actions/github";
 import { Context } from "@actions/github/lib/context";
 import { PullRequest } from "@octokit/webhooks-types";
@@ -11,6 +11,8 @@ import { generateCoreLogger } from "./util";
 
 export interface Inputs {
   configLocation: string;
+  /** Should automatically request missing reviewers */
+  requestReviewers: boolean;
   /** GitHub's action default secret */
   repoToken: string;
   /** A custom access token with the read:org access */
@@ -33,10 +35,11 @@ const getRepo = (ctx: Context) => {
 
 const getInputs = (): Inputs => {
   const configLocation = getInput("config-file");
+  const requestReviewers = getBooleanInput("request-reviewers", { required: false });
   const repoToken = getInput("repo-token", { required: true });
   const teamApiToken = getInput("team-token", { required: true });
 
-  return { configLocation, repoToken, teamApiToken };
+  return { configLocation, requestReviewers, repoToken, teamApiToken };
 };
 
 const repo = getRepo(context);

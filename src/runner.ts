@@ -461,7 +461,9 @@ export class ActionRunner {
    * 3. It generates a status check in the Pull Request
    * 4. WIP - It assigns the required reviewers to review the PR
    */
-  async runAction(inputs: Omit<Inputs, "repoToken">): Promise<Pick<CheckData, "conclusion"> & PullRequestReport> {
+  async runAction(
+    inputs: Omit<Inputs, "repoToken" | "teamApiToken">,
+  ): Promise<Pick<CheckData, "conclusion"> & PullRequestReport> {
     const config = await this.getConfigFile(inputs.configLocation);
 
     const prValidation = await this.validatePullRequest(config);
@@ -472,7 +474,9 @@ export class ActionRunner {
     const checkRunData = this.generateCheckRunData(reports);
     await this.checks.generateCheckRun(checkRunData);
 
-    this.requestReviewers(reports, config.preventReviewRequests);
+    if (inputs.requestReviewers) {
+      this.requestReviewers(reports, config.preventReviewRequests);
+    }
 
     setOutput("report", JSON.stringify(prValidation));
 
