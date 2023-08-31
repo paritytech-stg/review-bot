@@ -67,7 +67,7 @@ jobs:
           repo-token: ${{ github.token }}
           team-token: ${{ secrets.TEAM_TOKEN }}
           checks-token: ${{ secrets.CHECKS_TOKEN }}
-
+          request-reviewers: false
 ```
 Create a new PR and see if it is working.
 
@@ -109,6 +109,9 @@ You can find all the inputs in [the action file](./action.yml), but let's walk t
 			- You can use the same GitHub app for `checks-token` and `team-token`.
 - `config-file`: The location of the config file.
 	- **default**: `.github/review-bot.yml`
+- `request-reviewers`: If the system should automatically request the required reviewers.
+	- **default**: false.
+	- If enabled, when there are missing reviews, the system will request the appropriate users and/or team to review..
 
 #### Using a GitHub app instead of a PAT
 In some cases, specially in big organizations, it is more organized to use a GitHub app to authenticate, as it allows us to give it permissions per repository, and we can fine-grain them even better. If you wish to do that, you need to create a GitHub app with the following permissions:
