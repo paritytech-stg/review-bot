@@ -189,6 +189,7 @@ export class ActionRunner {
 
     // Just in case we filter the author
     usersToRequest = usersToRequest?.filter((user) => !caseInsensitiveEqual(user, this.prApi.getAuthor()));
+    console.log("users", usersToRequest, "author", this.prApi.getAuthor());
 
     await this.prApi.requestReview({ users: usersToRequest, teams: teamsToRequest });
   }
