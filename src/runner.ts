@@ -148,7 +148,10 @@ export class ActionRunner {
   }
 
   /** WIP - Class that will assign the requests for review */
-  requestReviewers(reports: RuleReport[], preventReviewRequests: ConfigurationFile["preventReviewRequests"]): void {
+  async requestReviewers(
+    reports: RuleReport[],
+    preventReviewRequests: ConfigurationFile["preventReviewRequests"],
+  ): Promise<void> {
     if (reports.length === 0) {
       return;
     }
@@ -184,13 +187,10 @@ export class ActionRunner {
       }
     }
 
-    const validArray = (array: string[] | undefined): boolean => !!array && array.length > 0;
-    const reviewersLog = [
-      validArray(teamsToRequest) ? `Teams: ${JSON.stringify(teamsToRequest)}` : "",
-      validArray(usersToRequest) ? `Users: ${JSON.stringify(usersToRequest)}` : "",
-    ].join(" - ");
+    // Just in case we filter the author
+    usersToRequest = usersToRequest?.filter((user) => user != this.prApi.getAuthor());
 
-    this.logger.info(`Need to request reviews from ${reviewersLog}`);
+    await this.prApi.requestReview({ users: usersToRequest, teams: teamsToRequest });
   }
 
   /** Aggregates all the reports and generate a status report
@@ -475,7 +475,7 @@ export class ActionRunner {
     await this.checks.generateCheckRun(checkRunData);
 
     if (inputs.requestReviewers) {
-      this.requestReviewers(reports, config.preventReviewRequests);
+      await this.requestReviewers(reports, config.preventReviewRequests);
     }
 
     setOutput("report", JSON.stringify(prValidation));
