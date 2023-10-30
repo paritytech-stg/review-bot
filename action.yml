@@ -32,4 +32,5 @@ outputs:
 
 runs:
   using: 'docker'
-  image: 'docker://ghcr.io/paritytech/review-bot/action:2.1.0'
+  # UNDO THIS!
+  image: 'Dockerfile'
